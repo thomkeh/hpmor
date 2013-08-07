@@ -107,7 +107,7 @@ if __name__ == '__main__':
     parser.add_argument('--format', help='format to convert to')
     parser.add_argument('--style-class', help='latex style to use (pdf only)')
     parser.add_argument('-o', '--out-name', help='base name of output file')
-    parser.add_argument('--font-size', help='font size', type=float, default=12)
+    parser.add_argument('--font-size', help='font size', type=int, default=12)
     parser.add_argument('--double-sided', action='store_true',
                         help='make pdf double sided')
     parser.add_argument('--paper-size', help='latex paper type (pdf only)')
