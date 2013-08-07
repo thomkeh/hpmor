@@ -38,26 +38,26 @@ pdf: pdf/hpmor-trade-hpotter.pdf pdf/hpmor-trade-classic.pdf
 
 pdf/hpmor-trade-hpotter.pdf: $(LATEX_TARGETS) $(HPOTTER_FILES)
 	mkdir -p .build
-	python script/hpmor-convert.py --format pdf -o hpmor-trade-hpotter --style-class hpotter --font-size 12 --paper ebook --double-sided
+	python script/hpmor-convert.py --format pdf -o hpmor-trade-hpotter --style-class hpotter --font-size 11 --paper ebook --double-sided
 	mv -f .build/hpmor-trade-hpotter.pdf pdf
 
 pdf/hpmor-trade-classic.pdf: $(LATEX_TARGETS) $(CLASSIC_FILES)
 	mkdir -p .build
-	python script/hpmor-convert.py --format pdf -o hpmor-trade-classic --style-class classic --font-size 11 --paper ebook --double-sided
+	python script/hpmor-convert.py --format pdf -o hpmor-trade-classic --style-class classic --font-size 10 --paper ebook --double-sided
 	mv -f .build/hpmor-trade-classic.pdf pdf
 
 # layout tests
 .build/hpotter-test.pdf: $(LATEX_TARGETS) $(HPOTTER_FILES)
 	mkdir -p .build
-	python script/hpmor-convert.py --start-chapter 72 --end-chapter 73 --format pdf -o hpotter-test --style-class hpotter --font-size 12 --paper ebook --double-sided
+	python script/hpmor-convert.py --start-chapter 72 --end-chapter 73 --format pdf -o hpotter-test --style-class hpotter --font-size 11 --paper ebook --double-sided
 
 .build/classic-test.pdf: $(LATEX_TARGETS) $(CLASSIC_FILES)
 	mkdir -p .build
-	python script/hpmor-convert.py --start-chapter 72 --end-chapter 73 --format pdf -o classic-test --style-class classic --font-size 11 --paper ebook --double-sided
+	python script/hpmor-convert.py --start-chapter 72 --end-chapter 73 --format pdf -o classic-test --style-class classic --font-size 10 --paper ebook --double-sided
 
 .PHONY: all
 # download chapters and re-build all formats
-all: update markdown latex pdf
+all: update markdown latex html pdf
 
 .PHONY: clean
 clean:
