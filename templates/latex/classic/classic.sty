@@ -1,0 +1,21 @@
+% classic style for Harry Potter and the Methods of Rationality using the
+% Palatino font.
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{classic}[2013/08/03 classic package]
+\RequirePackage{environ}
+\RequirePackage{calc}
+\RequirePackage{microtype}
+\RequirePackage{hpmor}
+
+\newcommand{\beforechapters}{%
+  \input{before_chapters}
+}
+
+\renewcommand*\rmdefault{ppl}
+\frenchspacing
+\chapterstyle{dash}
+\pagestyle{Ruled}
+
+% remove one inch padding from margins
+\setlength{\textheight}{\paperheight-\topmargin-\headheight-\headsep-\footskip-\topmargin}
+\addtolength{\topmargin}{-72.27pt}

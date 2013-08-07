@@ -1,0 +1,19 @@
+% jinja2 latex template
+% slightly modified jinja2 syntax is used
+
+\documentclass[((( font_size|escape_tex )))pt,((( paper_size|escape_tex ))),((( paper_sides|escape_tex )))]{memoir}
+% style_class is the name of the style to use
+\usepackage{((( style_class|escape_tex )))}
+
+\begin{document}
+\title{Harry Potter and the Methods of Rationality}
+\author{Eliezer Yudkowsky}
+% title pages, table of contents, ext. are in a separate file
+\beforechapters
+
+% include each chapter
+((* for chapter in chapters *))
+\input{../../latex/((( chapter|escape_tex )))}
+((* endfor *))
+
+\end{document}

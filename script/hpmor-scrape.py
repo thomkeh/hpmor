@@ -56,9 +56,11 @@ def download_chapters(chapters, verbose=False):
     if verbose:
         n = len(chapters)
         if n == 1:
-            print 'Downloading {} chapter...'.format(n)
+            print 'downloading {} chapter...'.format(n)
         elif n > 1:
-            print 'Downloading {} chapters...'.format(n)
+            print 'downloading {} chapters...'.format(n)
+        else:
+            print 'no chapters to download'
     for ch in chapters:
         url = '{}/chapter/{}'.format(HPMOR_URL, ch)
         if verbose:

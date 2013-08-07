@@ -1,0 +1,158 @@
+% hpotter copies the style of Harry Potter books
+% originally created to typeset Harry Potter and the Methods of Rationality,
+% it is designed to be used with the memoir document class and 12pt font.
+% This style requires the Adobe Garamond Pro font.
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{hpotter}[2013/08/03 hpotter package]
+\RequirePackage{fontspec}
+\RequirePackage{fmtcount}
+\RequirePackage{hyphenat}
+\RequirePackage{environ}
+\RequirePackage{calc}
+\RequirePackage{microtype}
+\RequirePackage{hpmor}
+
+\newcommand{\beforechapters}{%
+  \input{before_chapters}
+}
+
+% lumos font for chapter headings
+\newfontfamily\lumosfont[
+	Path = ./lumos-font/ ,
+	BoldFont = lumos.ttf ,
+	ItalicFont = lumos.ttf ,
+	BoldItalicFont = lumos.ttf ]{lumos.ttf}
+
+% font used to create stars in page headers and footers
+\newfontfamily\starfont[
+	Path = ./ ]{miscelanea.ttf}
+
+% command to make a star
+% used for page headers and footers
+\newcommand{\makestar}{{\starfont \textasteriskcentered}}
+
+% chapter style base on Harry Potter books
+\makechapterstyle{harrypotterchapter}{%
+  \setlength{\beforechapskip}{\onelineskip}%
+  \setlength{\afterchapskip}{1.5\onelineskip \@plus .1\onelineskip 
+                            \@minus 0.167\onelineskip}%
+  \renewcommand*{\chapnamefont}{\lumosfont}%
+  \renewcommand*{\chapnumfont}{\chapnamefont}%
+  \renewcommand*{\printchaptertitle}[1]{%
+    \centering \chaptitlefont\MakeTextUppercase{##1}}
+  \renewcommand*{\printchaptername}{%
+    \chapnamefont \MakeTextUppercase{\@chapapp}}
+  \renewcommand*{\printchapternum}{\centering\chapnumfont
+    \NUMBERstringnum{\c@chapter}}%
+  \renewcommand*{\chaptitlefont}{\lumosfont\itshape\huge\centering}%
+  \renewcommand*{\printchapternonum}{%
+    \vphantom{\printchaptername}\vskip\midchapskip}
+}
+
+% page style based on Harry Potter books
+\makepagestyle{harrypotterpage}
+  % fithead fits text in page headers by choosing between two font sizes
+  \newdimen\fontdim
+  \newdimen\smallfontdim
+  \fontdim11pt
+  \smallfontdim10pt
+  \NewEnviron{fithead}[3]{% \begin{fithead}{<width>}{<height>}{<contents>} \end{fithead}
+    \def\buildbox{%
+      \setbox0\vbox{\hbox{\minipage{#1}%
+        \fontsize{\fontdim}{1.2\fontdim}%
+        \selectfont%
+        \centering
+        \stuff%
+      \endminipage}}%
+      \dimen@\ht0
+      \advance\dimen@\dp0
+    }
+    \def\stuff{\BODY}% Store environment body
+    \buildbox
+    \ifdim\dimen@>#2
+    	% set font to smaller size
+    	\fontdim\smallfontdim
+    	\buildbox
+    \fi
+    \box0%typeset content
+  }
+  \newcommand{\headfootfont}{\lumosfont}
+  \newcommand{\footfont}{\headfootfont\addfontfeature{LetterSpace=10}\small}
+  \newcommand{\headfont}{
+  	\headfootfont \addfontfeature{LetterSpace=10}
+  	\addfontfeature{WordSpace=1.15}
+  }
+  % increase header height to fit two line chapter titles
+  \addtolength{\headheight}{\baselineskip}
+  \addtolength{\headheight}{1em}
+
+  % three stars used in page headings
+  \newcommand{\leftstars}{%
+  	{\makebox[0pt]{\mbox{\large\makestar}}} \makebox[0pt]{\raisebox{-1.6ex}{\large\makestar}} \raisebox{0.3ex}{\tiny\makestar}%
+  }
+  \newcommand{\rightstars}{\reflectbox{\leftstars}}
+
+  % calculate width of heading titles
+  % have to leave room for stars to be displayed
+  \newlength{\headtitlewidth}
+  \newlength{\templength}
+  \settowidth{\templength}{\leftstars}
+  \setlength{\headtitlewidth}{\textwidth-\templength-\templength-2em}
+
+  \newcommand{\makefoot}{%
+    \footfont\makestar\makebox[4.5em][c]{\footfont\thepage}\makestar%
+  }
+  \newcommand{\makehead}[1]{%
+    \headfont
+    \makebox[\textwidth][c]{%
+    \begin{fithead}{\headtitlewidth}{1em}
+      \nohyphens{#1}
+    \end{fithead}}%
+  }
+  \makeevenfoot{harrypotterpage}{}{\makefoot}{}
+  \makeoddfoot{harrypotterpage}{}{\makefoot}{}
+  \makeevenhead{harrypotterpage}{\leftstars}{%
+  	\makehead{\MakeTextUppercase{\@chapapp} \NUMBERstringnum{\c@chapter}}%
+  }{\rightstars}
+  \makeoddhead{harrypotterpage}{\leftstars}{%
+  	\makehead{\MakeTextUppercase{\currentchapter}}%
+  }{\rightstars}
+  \makepagestyle{hpfooteronly}
+  \makeevenfoot{hpfooteronly}{}{\makefoot}{}
+  \makeoddfoot{hpfooteronly}{}{\makefoot}{}
+  \aliaspagestyle{chapter}{hpfooteronly}
+  \copypagestyle{hptocpage}{hpfooteronly}
+  \makeevenhead{hptocpage}{\leftstars}{%
+    \makehead{\MakeTextUppercase{Contents}}%
+  }{\rightstars}
+  \makeoddhead{hptocpage}{\leftstars}{%
+    \makehead{\MakeTextUppercase{Contents}}%
+  }{\rightstars}
+
+% centered table of contents
+\setcounter{tocdepth}{0}
+\setlength{\cftchapterindent}{0pt}
+\setpnumwidth{0pt}
+\setrmarg{0pt}
+\renewcommand*{\cftchapterfont}{}
+\renewcommand\chapternumberlinebox[2]{%
+  \hfil\normalsize\lumosfont
+  \NUMBERstringnum{#2}%
+  \normalsize\normalfont\newline\hspace*{\fill}%
+  }
+\renewcommand\cftchapterleader{\enspace\textperiodcentered\enspace}
+\renewcommand\cftchapterpagefont{}
+\renewcommand*{\cftchapterformatpnum}[1]{%
+  \cftchapterformatpnumhook{#1}\cftchapterpagefont#1%
+  \hspace*{\fill}%
+  }
+\cftsetindents{chapter}{0pt}{0pt}
+
+\setmainfont[Ligatures=TeX]{Adobe Garamond Pro}
+\frenchspacing
+\chapterstyle{harrypotterchapter}
+\pagestyle{harrypotterpage}
+
+% remove one inch padding from margins
+\setlength{\textheight}{\paperheight-\topmargin-\headheight-\headsep-\footskip-1.5\topmargin}
+\addtolength{\topmargin}{-72.27pt}
