@@ -7,6 +7,7 @@
 DUMP_FILES = $(wildcard html-dump/*.htm)
 MARKDOWN_TARGETS = $(DUMP_FILES:html-dump/%.htm=markdown/%.md)
 LATEX_TARGETS = $(MARKDOWN_TARGETS:markdown/%.md=latex/%.tex)
+HTML_TARGETS = $(MARKDOWN_TARGETS:markdown/%.md=html/%.htm)
 HPOTTER_FILES = templates/latex/hpmor.sty templates/latex/hpotter/hpotter.sty templates/latex/hpmor.tex templates/latex/hpotter/before_chapters.tex templates/latex/hpotter/halftitle.tex templates/latex/hpotter/titlepage.tex
 CLASSIC_FILES = templates/latex/hpmor.sty templates/latex/classic/classic.sty templates/latex/hpmor.tex templates/latex/classic/before_chapters.tex templates/latex/classic/halftitle.tex templates/latex/hpotter/titlepage.tex
 
@@ -21,11 +22,16 @@ markdown: $(MARKDOWN_TARGETS)
 
 latex: $(LATEX_TARGETS)
 
+html: $(HTML_TARGETS)
+
 latex/%.tex: markdown/%.md
 	pandoc --chapters -o latex/$*.tex markdown/$*.md
 
 markdown/%.md:
 	pandoc -o markdown/$*.md html-dump/$*.htm
+
+html/%.htm: markdown/%.md
+	pandoc -o html/$*.htm markdown/$*.md
 
 # xelatex generated pdf's
 pdf: pdf/hpmor-trade-hpotter.pdf pdf/hpmor-trade-classic.pdf
