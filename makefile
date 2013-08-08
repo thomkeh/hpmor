@@ -1,6 +1,6 @@
 # makefile to convert between different formats
 # 'make update' downloads new chapters
-# use 'make all' downloads new chapters and builds all formats
+# 'make all' downloads new chapters and builds all formats
 
 # recursive rather than immediate expansion is used because
 # the list of files must be up to date after new chapters are downloaded
@@ -27,6 +27,8 @@ html: $(HTML_TARGETS)
 latex/%.tex: markdown/%.md
 	pandoc --chapters -o latex/$*.tex markdown/$*.md
 
+# to prevent accidental overriding of formatting fixes, markdown files
+# do not require html-dump files
 markdown/%.md:
 	pandoc -o markdown/$*.md html-dump/$*.htm
 
