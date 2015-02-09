@@ -93,14 +93,18 @@ def pdf(out_name, style_class, font_size=12, paper_size='a5paper',
                 paper_sides=paper_sides, chapters=chapters))
     # compile the to pdf with xelatex
     pdf_filename = os.path.join(BUILD_DIR, os.extsep.join([out_name, 'pdf']))
+    env = os.environ.copy();
+    env['TEXINPUTS'] = template_dir+':'+os.path.join(template_dir, style_class)+':'
     command = ['xelatex', '--include-directory={}'.format(template_dir),
     '--output-directory={}'.format(BUILD_DIR),
     '--include-directory={}'.format(os.path.join(template_dir, style_class)),
     rendered_template]
+    #command = ['lualatex '+ rendered_template]
     # xelatex is run twice to ensure correct table of contents
     for _ in range(2):
-        print ' '.join(command)
-        call(command)
+        cmd = ' '.join(command)
+        print cmd
+        call(cmd, env=env, shell=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert hpmor to different formats')
